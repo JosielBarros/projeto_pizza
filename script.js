@@ -11,6 +11,10 @@ pizzaJson.map((item, index)=>{
   pizzaitem.querySelector('.pizza-item--price').innerHTML = `R$ ${item.price.toFixed(2)}`;//tofixed(2) define duas casas depois da vígula.
   pizzaitem.querySelector('.pizza-item--name').innerHTML = item.name;
   pizzaitem.querySelector('.pizza-item--desc').innerHTML = item.description;
+  pizzaitem.querySelector('a').addEventListener('click', (e)=>{
+    e.preventDefault();//Previne contra evento padrão.
+    console.log('clicou');
+  })
 
   c('.pizza-area').append(pizzaitem);//Adiciona 'pizzaitem' no html de ' pizza-area'
 
