@@ -1,3 +1,5 @@
+let modalqt = 1;
+
 const c = (el)=> { return document.querySelector(el);} //Retorna o item.
 
 /*const c = (el)=> document.querySelector(el); //A mesma coisa do de cima.*/
@@ -21,12 +23,23 @@ pizzaJson.map((item, index)=>{
     //Criando uma varável que vai receber o index de cada pizza.
     //Estamos buscando um elemento anterior o 'e' ou 'a' ao usar o target. Depois pegamos o atributo 'data-key' com o getAttribute.
     let key = e.target.closest('.pizza-item').getAttribute('data-key');
+    modalqt = 1;
 
     c('.pizzaBig img').src = pizzaJson[key].img;
     c('.pizzaInfo h1').innerHTML = pizzaJson[key].name;
     c('.pizzaInfo--desc').innerHTML = pizzaJson[key].description;
-    c('.pizzaInfo--sizearea').innerHTML = pizzaJson[key].sizes;
+    c('.pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price.toFixed(2)}`;
 
+    c('.pizzaInfo--size.selected').classList.remove('selected');//Estamos removendo a seleção do tamanho da pizza. Toda vez que voltar.
+    
+    cs('.pizzaInfo--size').forEach((size, sizeindex)=>{//Ele está pecorrendo todos os elementos de 'pizzaInfo--size'.
+      if (sizeindex == 2) {//Está selecionando o tamanho grande de pizza. Pois o index dele é 2.
+        size.classList.add('selected');//Está adicionando a classe 'selected' no index 2.
+      }
+      size.querySelector('span').innerHTML = pizzaJson[key].sizes[sizeindex];//Está substituindo o 'span' pelo tamnho da pizza. No caso sizes[sizeindex].
+    });
+
+    c('.pizzaInfo--qt').innerHTML = modalqt;
 
 
 
