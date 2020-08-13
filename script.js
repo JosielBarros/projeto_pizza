@@ -66,3 +66,23 @@ function closemodal (){//Função para sumir o modal da tela.
 cs('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item)=>{//Ele executa nos dois elementos.
   item.addEventListener('click', closemodal);//Ao clicar nos elementos ele executa a função 'closemodal'
 });
+
+//EVENTOS DOS BUTÕES DE QUANTIDADE
+c('.pizzaInfo--qtmenos').addEventListener('click',()=>{
+      if(modalqt > 1){//Quantidade não pode ser menor do que 1.
+        modalqt --;//Subtrai 1 a cada clique.
+        c('.pizzaInfo--qt').innerHTML = modalqt;//Exibe quantidade atualizada.
+      };
+});
+c('.pizzaInfo--qtmais').addEventListener('click',()=>{
+  modalqt++;//Soma 1.
+  c('.pizzaInfo--qt').innerHTML = modalqt;//Exibe na tela a quantidade atualizada.
+});
+
+//EVENTO DE CLICK QUE ALTERA O TAMANHO DAS PIZZAS
+cs('.pizzaInfo--size').forEach((size, sizeindex)=>{
+  size.addEventListener('click', ()=>{//Ao clicar no tamanho da pizza ele executa algo.
+    c('.pizzaInfo--size.selected').classList.remove('selected');//Remove o elemnto que tiver a class 'selected'.
+    size.classList.add('selected');//Adiciona a class'selected' no elemento que foi clicado.
+  });
+});
