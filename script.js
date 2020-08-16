@@ -1,4 +1,6 @@
 let modalqt = 1;
+let cart = [];
+let modalkey = 0;
 
 const c = (el)=> { return document.querySelector(el);} //Retorna o item.
 
@@ -26,6 +28,7 @@ pizzaJson.map((item, index)=>{
     //Estamos buscando um elemento anterior o 'e' ou 'a' ao usar o target. Depois pegamos o atributo 'data-key' com o getAttribute.
     let key = e.target.closest('.pizza-item').getAttribute('data-key');
     modalqt = 1;//Sempre quando abrir o modal de ecolha de pizzas, ele reseta a quantidade de pizza para 1.
+    modalkey = key;
 
     c('.pizzaBig img').src = pizzaJson[key].img;
     c('.pizzaInfo h1').innerHTML = pizzaJson[key].name;
@@ -86,3 +89,28 @@ cs('.pizzaInfo--size').forEach((size, sizeindex)=>{
     size.classList.add('selected');//Adiciona a class'selected' no elemento que foi clicado.
   });
 });
+
+//EVENTO DE CLICK PARA ADICIONAR ELEMENTOS NO CARRINHO
+c('.pizzaInfo--addButton').addEventListener('click', ()=>{
+  let size = parseInt(c('.pizzaInfo--size.selected').getAttribute('data-key'));//Estamos pegando o data-key da pizza selecioanda. Ou seja, o tamanho.
+  //parseInt-- Transforma de string em número.
+
+  let identifier = pizzaJson[modalkey].id+'-'+size;//Pega do 'id' da pizza específica de acordo com o 'modalkey'. E depois o tamanho da pizza que foi selecionada.
+
+  let key = cart.findIndex((item)=>item.identifier == identifier);//Ele pesquisa o index do elemento. Se tiver index ele retorna o mesmo. Senão tiver ele retorna '-1'.
+  //findIndex procura por alguns item que colocamos. Se encontrar retorna o index do item. Se não encontar não encontrar retorna '-1.'
+  
+  if (key > -1) {
+    cart[key].qt += modalqt;//Soma a quantidade de pizzas de determinado 'key' que está no carrinho com a nova quantidade do mesmo 'key'.
+  } else { 
+    cart.push({//Estamos enviando ou empurando estas informações para a variável 'cart'.
+      identifier,
+      id:pizzaJson[modalkey].id,//Pegamos o 'id' do pizzajson com referência no 'modalkey', no caso o nome da pizza. E enviamos para 'id'. 
+      size:size,//Usamos o tamanho da pizza baseado na variável criada a cima.
+      qt:modalqt//Enviamos a quantidade definida na variável 'modalqt'.
+    });
+  }
+  
+  closemodal();//Ao final executamos a função para fechar o modal.
+});
+
