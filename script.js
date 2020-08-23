@@ -110,7 +110,65 @@ c('.pizzaInfo--addButton').addEventListener('click', ()=>{
       qt:modalqt//Enviamos a quantidade definida na variável 'modalqt'.
     });
   }
-  
+  updatecart();//Atualiza  carrinho de compras na lateral da página.
   closemodal();//Ao final executamos a função para fechar o modal.
 });
 
+function updatecart(){
+  if(cart.length > 0){//Verifica se existe alguns elemento no cart.
+    c('aside').classList.add('show');//Adiciona a classe 'show' em 'aside'.
+    c('.cart').innerHTML = '';
+    /*Zera as informações que estão aparecendo no carrinho. Mas elas continuam na array 'cart' e quando clicar para
+    adicionar outras pizzas ele busca as informações da array 'cart' e exibe novamente.*/
+
+    for( let i in cart){//Para todos os itens que estão em 'cart' representados pelo 'i' faça...
+      let pizzaitem = pizzaJson.find((item)=> item.id == cart[i].id)/* O find trás o item verificado no pizzajson. 
+      Neste caso se o id do item do pizzaJson for igual ao id dos itens em cart, ele retorna o próprio item do pizzaJson.*/
+
+      let cartitem = c('.models .cart--item').cloneNode(true);//Clonando as informações de 'models cart--item' em cartitem.
+
+      let pizzasizename;
+      switch (cart[i].size) {
+        case 0:
+          pizzasizename = 'P';
+          break;
+        case 1:
+          pizzasizename = 'M';
+          break;
+        case 2:
+          pizzasizename = 'G';
+        break;
+      }
+      
+      let pizzaname = `${pizzaitem.name}(${pizzasizename})`;
+
+      cartitem.querySelector('img').src = pizzaitem.img;//Adicionamos ao 'src' da 'img' do cartitem as informações de 'pizzaitem' que foram retiradas de pizzaJson.
+      cartitem.querySelector('.cart--item-nome').innerHTML = pizzaname;
+      cartitem.querySelector('.cart--item--qt').innerHTML = cart[i].qt;
+
+      cartitem.querySelector('.cart--item-qtmenos').addEventListener('click', ()=>{
+        if(cart[i].qt > 1){
+          cart[i].qt --;
+        }
+        else{
+          cart.splice(i, 1);
+        }
+        updatecart();
+      });
+      cartitem.querySelector('.cart--item-qtmais').addEventListener('click', ()=>{
+        cart[i].qt ++;
+        updatecart();
+      });
+      
+
+
+      c('.cart').append(cartitem);
+      //Adiciona as informações de 'cartitem' em '.cart'. Essas informações vieram de 'models .cart--item' e foram adicionadas em cartitem.
+
+
+    }
+  }
+  else{
+    c('aside').classList.remove('show');
+  }
+};
