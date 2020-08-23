@@ -110,78 +110,7 @@ c('.pizzaInfo--addButton').addEventListener('click', ()=>{
       qt:modalqt//Enviamos a quantidade definida na variável 'modalqt'.
     });
   }
-  updatecart();//Atualiza  carrinho de compras na lateral da página.
+  
   closemodal();//Ao final executamos a função para fechar o modal.
 });
 
-function updatecart(){
-  if(cart.length > 0){//Verifica se existe alguns elemento no cart.
-    c('aside').classList.add('show');//Adiciona a classe 'show' em 'aside'.
-    c('.cart').innerHTML = '';
-    /*Zera as informações que estão aparecendo no carrinho. Mas elas continuam na array 'cart' e quando clicar para
-    adicionar outras pizzas ele busca as informações da array 'cart' e exibe novamente.*/
-
-    let subtotal = 0;
-    let desconto = 0;
-    let total = 0;
-
-    for( let i in cart){//Para todos os itens que estão em 'cart' representados pelo 'i' faça...
-      let pizzaitem = pizzaJson.find((item)=> item.id == cart[i].id)/* O find trás o item verificado no pizzajson. 
-      Neste caso se o id do item do pizzaJson for igual ao id dos itens em cart, ele retorna o próprio item do pizzaJson.*/
-
-      subtotal += pizzaitem.price * cart[i].qt;
-
-      let cartitem = c('.models .cart--item').cloneNode(true);//Clonando as informações de 'models cart--item' em cartitem.
-
-      let pizzasizename;
-      switch (cart[i].size) {//Ele vai escolher de acordo com o index do size que está no carrinho. Para aquela pizza espeficicada, no caso aqui representada pelo 'i'.
-        case 0:
-          pizzasizename = 'P';
-          break;
-        case 1:
-          pizzasizename = 'M';
-          break;
-        case 2:
-          pizzasizename = 'G';
-        break;
-      }
-      
-      let pizzaname = `${pizzaitem.name}(${pizzasizename})`;//Ele recebe o nome da pizza de acordo com o pizzaJason. Mais a sigla do tamanho.
-
-      cartitem.querySelector('img').src = pizzaitem.img;//Adicionamos ao 'src' da 'img' do cartitem as informações de 'pizzaitem' que foram retiradas de pizzaJson.
-      cartitem.querySelector('.cart--item-nome').innerHTML = pizzaname;//Ele está mostrando as informações do carrinho no html.
-      cartitem.querySelector('.cart--item--qt').innerHTML = cart[i].qt;//Ele está mostrando as informaçoes da quantidade do carrinho para o html.
-      cartitem.querySelector('.cart--item-qtmenos').addEventListener('click', ()=>{
-        if(cart[i].qt > 1){//Ele verifica se ao clicar no butão de diminuir a quantidade de pizza, há mais de 1 unidade.
-          cart[i].qt --;
-        
-        else{
-          cart.splice(i, 1);//Caso não tenha mais aquele tipo de pizza no carrinho ele exclui do carrinho.
-        }//No caso o 'splice' vai retirar 1 item 'i' que está no carrinho. 
-        updatecart();
-      });
-      cartitem.querySelector('.cart--item-qtmais').addEventListener('click', ()=>{
-        cart[i].qt ++;//Ao clicar neste butão ele adiciona mais 1 quantidade.
-        updatecart();//Executa a função novamente, assim atuliazando os dados na exibição do html.
-      });
-      
-      
-
-      c('.cart').append(cartitem);
-      //Adiciona as informações de 'cartitem' em '.cart'. Essas informações vieram de 'models .cart--item' e foram adicionadas em cartitem.
-
-
-    }
-
-    desconto = subtotal * 0.1;
-    total = subtotal - desconto;
-
-    c('.subtotal span:last-child' ).innerHTML = `R$ ${subtotal.toFixed(2)}`;
-    c('.desconto span:last-child' ).innerHTML = `R$ ${desconto.toFixed(2)}`;
-    c('.total span:last-child' ).innerHTML = `R$ ${total.toFixed(2)}`;
-
-  }
-  else{
-    c('aside').classList.remove('show');
-  }
-};
